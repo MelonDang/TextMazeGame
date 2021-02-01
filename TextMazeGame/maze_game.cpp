@@ -7,6 +7,8 @@
 * 1 : 길
 * 2 : 시작점
 * 3 : 도착점
+* 4 : 폭탄
+* 5 : 폭탄 이펙트
 */
 
 void MazeGame::InitMaze()
@@ -38,38 +40,41 @@ void MazeGame::InitMaze()
 
 void MazeGame::moveUp()
 {
-	if (maze_[player_pos_.y - 1][player_pos_.x] == '0' || player_pos_.y - 1 < 0) { return; }
+	char up = maze_[player_pos_.y - 1][player_pos_.x];
+
+	if (up == '0' || up == '4' || player_pos_.y - 1 < 0) { return; }
 
 	--player_pos_.y;
 }
 
 void MazeGame::moveDown()
 {
-	if (maze_[player_pos_.y + 1][player_pos_.x] == '0' || player_pos_.y + 1 > 19) { return; }
+	char down = maze_[player_pos_.y + 1][player_pos_.x];
+
+	if (down == '0' || down == '4' || player_pos_.y + 1 > 19) { return; }
 
 	++player_pos_.y;
 }
 
 void MazeGame::moveLeft()
 {
-	if (maze_[player_pos_.y][player_pos_.x - 1] == '0' || player_pos_.x - 1 < 0) { return; }
+	char left = maze_[player_pos_.y][player_pos_.x - 1];
+
+	if (left == '0' || left == '4' || player_pos_.x - 1 < 0) { return; }
 
 	--player_pos_.x;
 }
 
 void MazeGame::moveRight()
 {
-	if (maze_[player_pos_.y][player_pos_.x + 1] == '0' || player_pos_.x + 1 > 19) { return; }
+	char right = maze_[player_pos_.y][player_pos_.x + 1];
+
+	if (right == '0' || right == '4' || player_pos_.x + 1 > 19) { return; }
 
 	++player_pos_.x;
 }
 
-bool MazeGame::IsAlived()
-{
-	return player_pos_.x == end_pos_.x && player_pos_.y == end_pos_.y;
-}
-
-void MazeGame::MovePlayer(const char input)
+void MazeGame::movePlayer(const char input)
 {
 	switch (input)
 	{
@@ -92,7 +97,86 @@ void MazeGame::MovePlayer(const char input)
 	}
 }
 
-void MazeGame::PrintMaze()
+void MazeGame::createBomb()
+{
+	if (plant_bombs_count_ >= MAX_BOMB_COUNT) { return; }
+
+	for (int i = 0; i < plant_bombs_count_; ++i)
+	{
+		if (bombs_pos_[i].x == player_pos_.x && bombs_pos_[i].y == player_pos_.y) { return; }
+	}
+
+	if (player_pos_.x == start_pos_.x && player_pos_.y == start_pos_.y)
+	{
+		return;
+	}
+	else if (player_pos_.x == end_pos_.x && player_pos_.y == end_pos_.y)
+	{
+		return;
+	}
+
+	maze_[player_pos_.y][player_pos_.x] = '4';
+
+	bombs_pos_[plant_bombs_count_] = player_pos_;
+
+	plant_bombs_count_ += 1;
+}
+
+void MazeGame::fireBomb()
+{
+	for (int i = 0; i < plant_bombs_count_; ++i)
+	{
+		maze_[bombs_pos_[i].y][bombs_pos_[i].x] = '1';
+
+		if (bombs_pos_[i].x == player_pos_.x && bombs_pos_[i].y == player_pos_.y)
+		{
+			player_pos_ = { 0, };
+			continue;
+		}
+
+		if (bombs_pos_[i].y - 1 >= 0 && maze_[bombs_pos_[i].y - 1][bombs_pos_[i].x] == '0') //위쪽을 터트릴 경우
+		{
+			maze_[bombs_pos_[i].y - 1][bombs_pos_[i].x] = '1';
+		}
+		else if (bombs_pos_[i].y + 1 <= 19 && maze_[bombs_pos_[i].y + 1][bombs_pos_[i].x] == '0') //아래쪽을 터트릴 경우
+		{
+			maze_[bombs_pos_[i].y + 1][bombs_pos_[i].x] = '1';
+		}
+		else if (bombs_pos_[i].x - 1 >= 0 && maze_[bombs_pos_[i].y][bombs_pos_[i].x - 1] == '0') //왼쪽을 터트릴 경우
+		{
+			maze_[bombs_pos_[i].y][bombs_pos_[i].x - 1] = '1';
+		}
+		else if (bombs_pos_[i].x + 1 <= 19 && maze_[bombs_pos_[i].y][bombs_pos_[i].x + 1] == '0') //오른쪽을 터트릴 경우
+		{
+			maze_[bombs_pos_[i].y][bombs_pos_[i].x + 1] = '1';
+		}
+	}
+
+	plant_bombs_count_ = 0;
+}
+
+bool MazeGame::IsArrived()
+{
+	return player_pos_.x == end_pos_.x && player_pos_.y == end_pos_.y;
+}
+
+void MazeGame::InputKey(const char input)
+{
+	if (input == 't' || input == 'T')
+	{
+		createBomb();
+	}
+	else if (input == 'u' || input == 'U')
+	{
+		fireBomb();
+	}
+	else
+	{
+		movePlayer(input);
+	}
+}
+
+void MazeGame::UpdateMaze()
 {
 	for (int i = 0; i < 20; ++i)
 	{
@@ -118,7 +202,10 @@ void MazeGame::PrintMaze()
 			{
 				printf("◎");
 			}
-
+			else if (maze_[i][j] == '4')
+			{
+				printf("♨");
+			}
 		}
 		printf("\n");
 	}

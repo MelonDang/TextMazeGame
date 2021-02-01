@@ -14,17 +14,19 @@ int main()
 	{
 		system("cls");
 
-		maze_game.PrintMaze();
+		maze_game.UpdateMaze();
 
+		printf("¼³Ä¡ÇÑ ÆøÅº °³¼ö : %d / 5\n", maze_game.getPlantBombsCount());
+		printf("T : ÆøÅº ¼³Ä¡, U : ÆøÅº ÅÍÆ®¸®±â\n");
 		printf("W : À§, S : ¾Æ·¡, A : ¿ÞÂÊ, D : ¿À¸¥ÂÊ, Q : Á¾·á\n");
 
-		char input = _getch();
+		int8_t input = _getch();
 
 		if (input == 'q' || input == 'Q') { break; }
 
-		maze_game.MovePlayer(input);
+		maze_game.InputKey(input);
 
-		if (maze_game.IsAlived())
+		if (maze_game.IsArrived())
 		{
 			printf("µµÂøÇß½¿¹Ì´Ù\n");
 			break;
