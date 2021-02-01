@@ -2,6 +2,7 @@
 
 #include "maze_game.h"
 
+#include <windows.h>
 #include <conio.h>
 
 int main()
@@ -20,16 +21,16 @@ int main()
 		printf("T : ÆøÅº ¼³Ä¡, U : ÆøÅº ÅÍÆ®¸®±â\n");
 		printf("W : À§, S : ¾Æ·¡, A : ¿ÞÂÊ, D : ¿À¸¥ÂÊ, Q : Á¾·á\n");
 
-		int8_t input = _getch();
+		if (maze_game.IsArrived())
+		{
+			MessageBox(0, L"Å¬¸®¾î!", L"Maze Game", MB_OK);
+			break;
+		}
+
+		char input = _getch();
 
 		if (input == 'q' || input == 'Q') { break; }
 
 		maze_game.InputKey(input);
-
-		if (maze_game.IsArrived())
-		{
-			printf("µµÂøÇß½¿¹Ì´Ù\n");
-			break;
-		}
 	}
 }

@@ -8,7 +8,6 @@
 * 2 : ½ÃÀÛÁ¡
 * 3 : µµÂøÁ¡
 * 4 : ÆøÅº
-* 5 : ÆøÅº ÀÌÆåÆ®
 */
 
 void MazeGame::InitMaze()
@@ -230,7 +229,7 @@ void MazeGame::UpdateMaze()
 			}
 			else if (maze_[i][j] == '2')
 			{
-				printf("¡Ú");
+				printf("¡Û");
 			}
 			else if (maze_[i][j] == '3')
 			{

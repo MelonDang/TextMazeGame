@@ -1,18 +1,16 @@
 #pragma once
 
-#include <stdint.h>
 #include <cstdio>
-#include <list>
 #include <string>
 
-constexpr static uint16_t MAX_BOMB_COUNT = 5;
+constexpr static short MAX_BOMB_COUNT = 5;
 
 class MazeGame
 {
 	struct Point
 	{
-		uint16_t x;
-		uint16_t y;
+		short x;
+		short y;
 	};
 
 	char maze_[21][21] = { 0, };
@@ -21,7 +19,7 @@ class MazeGame
 	Point start_pos_ = { 0, };
 	Point end_pos_ = { 19, 19 };
 
-	uint16_t plant_bombs_count_ = 0;
+	short plant_bombs_count_ = 0;
 	Point bombs_pos_[5];
 
 	void moveUp();
@@ -34,7 +32,7 @@ class MazeGame
 	void createBomb();
 	void fireBomb();
 public:
-	uint16_t getPlantBombsCount() const { return plant_bombs_count_; }
+	short getPlantBombsCount() const { return plant_bombs_count_; }
 
 	void InitMaze();
 
