@@ -5,6 +5,8 @@
 #include <list>
 #include <string>
 
+constexpr static uint16_t MAX_BOMB_COUNT = 5;
+
 class MazeGame
 {
 	struct Point
@@ -18,8 +20,6 @@ class MazeGame
 	Point player_pos_ = { 0, };
 	Point start_pos_ = { 0, };
 	Point end_pos_ = { 19, 19 };
-
-	constexpr static uint16_t MAX_BOMB_COUNT = 5;
 
 	uint16_t plant_bombs_count_ = 0;
 	Point bombs_pos_[5];

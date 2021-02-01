@@ -16,7 +16,7 @@ int main()
 
 		maze_game.UpdateMaze();
 
-		printf("설치한 폭탄 개수 : %d / 5\n", maze_game.getPlantBombsCount());
+		printf("설치한 폭탄 개수 : %d / %d\n", maze_game.getPlantBombsCount(), MAX_BOMB_COUNT);
 		printf("T : 폭탄 설치, U : 폭탄 터트리기\n");
 		printf("W : 위, S : 아래, A : 왼쪽, D : 오른쪽, Q : 종료\n");
 

@@ -126,30 +126,64 @@ void MazeGame::fireBomb()
 {
 	for (int i = 0; i < plant_bombs_count_; ++i)
 	{
+		if (bombs_pos_[i].x == player_pos_.x && bombs_pos_[i].y == player_pos_.y) { player_pos_ = { 0, }; } //캐릭터위치에서 터질경우
+
+		if (bombs_pos_[i].y - 1 >= 0)
+		{
+			//위쪽이 터질 경우
+			if (maze_[bombs_pos_[i].y - 1][bombs_pos_[i].x] == '0')
+			{
+				maze_[bombs_pos_[i].y - 1][bombs_pos_[i].x] = '1';
+			}
+			else if (bombs_pos_[i].x == player_pos_.x && bombs_pos_[i].y - 1 == player_pos_.y)
+			{
+				player_pos_ = { 0, };
+			}
+		}
+
+		if (bombs_pos_[i].y + 1 <= 19)
+		{
+			//아래쪽이 터질 경우
+
+			if (maze_[bombs_pos_[i].y + 1][bombs_pos_[i].x] == '0')
+			{
+				maze_[bombs_pos_[i].y + 1][bombs_pos_[i].x] = '1';
+			}
+			else if (bombs_pos_[i].x == player_pos_.x && bombs_pos_[i].y + 1 == player_pos_.y)
+			{
+				player_pos_ = { 0, };
+			}
+		}
+
+		if (bombs_pos_[i].x - 1 >= 0) 
+		{
+			//왼쪽이 터질 경우
+
+			if (maze_[bombs_pos_[i].y][bombs_pos_[i].x - 1] == '0')
+			{
+				maze_[bombs_pos_[i].y][bombs_pos_[i].x - 1] = '1';
+			}
+			else if (bombs_pos_[i].x - 1 == player_pos_.x && bombs_pos_[i].y == player_pos_.y)
+			{
+				player_pos_ = { 0, };
+			}
+		}
+
+		if (bombs_pos_[i].x + 1 <= 19) 
+		{
+			//오른쪽이 터질경우
+
+			if (maze_[bombs_pos_[i].y][bombs_pos_[i].x + 1] == '0')
+			{
+				maze_[bombs_pos_[i].y][bombs_pos_[i].x + 1] = '1';
+			}
+			else if (bombs_pos_[i].x + 1 == player_pos_.x && bombs_pos_[i].y == player_pos_.y)
+			{
+				player_pos_ = { 0, };
+			}
+		}
+
 		maze_[bombs_pos_[i].y][bombs_pos_[i].x] = '1';
-
-		if (bombs_pos_[i].x == player_pos_.x && bombs_pos_[i].y == player_pos_.y)
-		{
-			player_pos_ = { 0, };
-			continue;
-		}
-
-		if (bombs_pos_[i].y - 1 >= 0 && maze_[bombs_pos_[i].y - 1][bombs_pos_[i].x] == '0') //위쪽을 터트릴 경우
-		{
-			maze_[bombs_pos_[i].y - 1][bombs_pos_[i].x] = '1';
-		}
-		else if (bombs_pos_[i].y + 1 <= 19 && maze_[bombs_pos_[i].y + 1][bombs_pos_[i].x] == '0') //아래쪽을 터트릴 경우
-		{
-			maze_[bombs_pos_[i].y + 1][bombs_pos_[i].x] = '1';
-		}
-		else if (bombs_pos_[i].x - 1 >= 0 && maze_[bombs_pos_[i].y][bombs_pos_[i].x - 1] == '0') //왼쪽을 터트릴 경우
-		{
-			maze_[bombs_pos_[i].y][bombs_pos_[i].x - 1] = '1';
-		}
-		else if (bombs_pos_[i].x + 1 <= 19 && maze_[bombs_pos_[i].y][bombs_pos_[i].x + 1] == '0') //오른쪽을 터트릴 경우
-		{
-			maze_[bombs_pos_[i].y][bombs_pos_[i].x + 1] = '1';
-		}
 	}
 
 	plant_bombs_count_ = 0;
